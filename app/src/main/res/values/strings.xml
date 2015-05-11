@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuestionSet</string>
+
+    <string name="generate_question_set">生成考卷</string>
+</resources>
