@@ -1,12 +1,18 @@
 package com.jianyan.android.questionset;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,15 +43,61 @@ public class QuestionFragment extends ListFragment {
         mQuestionListSize = QuestionSetManager.getInstance().getQuestionList().size();
         mQuestion = QuestionSetManager.getInstance().getQuestion(mQuestionId);
 
-        ArrayList<String> titleAndOptions = new ArrayList<String>();
-        titleAndOptions.add("" + (mQuestionId + 1) + ". " + mQuestion.getTitle());
+        ArrayList<Spanned> titleAndOptions = new ArrayList<Spanned>();
+        titleAndOptions.add(htmlToSpanned("" + (mQuestionId + 1) + ". " + mQuestion.getTitle()));
         ArrayList<String> options = mQuestion.getOptions();
         for (int i = 0; i < options.size(); ++i) {
-            titleAndOptions.add(Character.toString((char) ('A' + i)) + ". " + options.get(i));
+            titleAndOptions.add(htmlToSpanned(Character.toString((char) ('A' + i)) + ". " + options.get(i)));
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.array_item, titleAndOptions);
+        OptionAdapter adapter = new OptionAdapter(titleAndOptions);
         setListAdapter(adapter);
+    }
+
+    private class OptionAdapter extends ArrayAdapter<Spanned> {
+
+        public OptionAdapter(ArrayList<Spanned> options) {
+            super(getActivity(), 0, options);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (null == convertView) {
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_option, null); // *
+            }
+
+            Spanned s = getItem(position);
+
+            TextView optionTextView = (TextView) convertView.findViewById(R.id.option_item_list_textView);
+            optionTextView.setText(s);
+
+            return convertView;
+        }
+    }
+
+    private Spanned htmlToSpanned(String html) {
+        final Html.ImageGetter imageGetter = new Html.ImageGetter() {
+            @Override
+            public Drawable getDrawable(String source) {
+                Drawable drawable = getResources().getDrawable(Integer.parseInt(source));
+                int imageWidth = drawable.getIntrinsicWidth();
+                int imageHeight = drawable.getIntrinsicHeight();
+
+                DisplayMetrics mDisplayMetrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
+                int screenWidth = mDisplayMetrics.widthPixels;
+
+                if (imageWidth * 2 > screenWidth) {
+                    double rate = 1.0 * screenWidth / (imageWidth * 2);
+                    imageWidth = (int) (imageWidth * rate);
+                    imageHeight = (int) (imageHeight * rate);
+                }
+                drawable.setBounds(0, 0, imageWidth, imageHeight);
+                return drawable;
+            }
+        };
+
+        return Html.fromHtml(html, imageGetter, null);
     }
 
     @Override

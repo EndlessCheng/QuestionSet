@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <questions>
     <question>
-        <title>这句话的意思是：</title>
-        <option>铁道路口车流量大</option>
-        <option>铁道路口有信号灯</option>
-        <option>容易引发事故</option>
-        <option>Test loooooooooooooooooooooooooooooooooooooooooong sentence</option>
+        <title>
+            <string>图片的意思是：</string>
+            <img src="pic4" />
+        </title>
+        <option>
+            <string>铁道路口车流量大</string>
+        </option>
+        <option>
+            <string>铁道路口有信号灯</string>
+        </option>
+        <option>
+            <string>容易引发事故</string>
+        </option>
+        <option>
+            <string>Test loooooooooooooooooooooooooooooooooooooooooong sentence</string>
+        </option>
     </question>
     <question>
-        <title>这：</title>
-        <option>铁</option>
-        <option>铁道路信号灯</option>
-        <option>容故</option>
-        <option>Test looooooooooooooong sentence</option>
+        <title>
+            <img src="pic2" />
+            <string>这：</string>
+        </title>
+        <option>
+            <string>铁</string>
+        </option>
+        <option>
+            <string>铁道路信号灯</string>
+        </option>
+        <option>
+            <string>容故</string>
+        </option>
+        <option>
+            <string>Test looooooooooooooong sentence</string>
+        </option>
+    </question>
+    <question>
+        <title>
+            <img src="pic3" />
+            <string>这：</string>
+        </title>
+        <option>
+            <string>铁</string>
+        </option>
+        <option>
+            <string>铁道路信号灯</string>
+        </option>
+        <option>
+            <string>容故</string>
+        </option>
+        <option>
+            <string>Test looooooooooooooong sentence</string>
+        </option>
     </question>
 </questions>

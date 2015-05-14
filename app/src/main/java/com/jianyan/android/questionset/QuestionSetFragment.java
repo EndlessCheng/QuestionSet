@@ -34,7 +34,7 @@ public class QuestionSetFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                xml2data();
+                xmlToText();
                 startActivity(new Intent(getActivity(), QuestionPagerActivity.class));
             }
         });
@@ -42,10 +42,11 @@ public class QuestionSetFragment extends Fragment {
         return v;
     }
 
-    private void xml2data() {
+    private void xmlToText() {
         ArrayList<Question> quesitionList = new ArrayList<Question>();
 
         Question question = null;
+        StringBuilder htmlStringBuilder = new StringBuilder("");
         try {
             for (XmlResourceParser xrp = getResources().getXml(R.xml.questions); xrp.getEventType() != XmlResourceParser.END_DOCUMENT; xrp.next()) {
                 if (xrp.getEventType() == XmlResourceParser.START_TAG) {
@@ -55,16 +56,30 @@ public class QuestionSetFragment extends Fragment {
                             question = new Question();
                             break;
                         case "title":
-                            question.setTitle(xrp.nextText());
-                            break;
                         case "option":
-                            question.addOption(xrp.nextText());
+                            htmlStringBuilder = new StringBuilder("");
+                            break;
+                        case "string":
+                            htmlStringBuilder.append(xrp.nextText());
+                            break;
+                        case "img":
+                            htmlStringBuilder.append("<img src='").
+                                    append(getResources().getIdentifier(xrp.getAttributeValue(null, "src"), "drawable", "com.jianyan.android.questionset"))
+                                    .append("'/>");
                             break;
                     }
                 } else if (xrp.getEventType() == XmlResourceParser.END_TAG) {
                     String tagName = xrp.getName();
-                    if ("question".equals(tagName)) {
-                        quesitionList.add(question);
+                    switch (tagName) {
+                        case "question":
+                            quesitionList.add(question);
+                            break;
+                        case "title":
+                            question.setTitle(htmlStringBuilder.toString());
+                            break;
+                        case "option":
+                            question.addOption(htmlStringBuilder.toString());
+                            break;
                     }
                 }
             }
