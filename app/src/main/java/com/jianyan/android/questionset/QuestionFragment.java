@@ -8,6 +8,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,6 +23,8 @@ public class QuestionFragment extends ListFragment {
 
 //    public static final String VIEW_PAGER = "questionset.VIEW_PAGER";
 //    public static final String QUESTION_ID = "questionset.QUESTION_ID";
+
+    private static final int DIVIDER_HEIGHT = 30;
 
     private ViewPager mViewPager;
     private int mQuestionListSize;
@@ -54,10 +57,29 @@ public class QuestionFragment extends ListFragment {
         setListAdapter(adapter);
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ListView lv = getListView();
+        lv.getDivider().setAlpha(0);
+        lv.setDividerHeight(DIVIDER_HEIGHT);
+    }
+
     private class OptionAdapter extends ArrayAdapter<Spanned> {
 
         public OptionAdapter(ArrayList<Spanned> options) {
             super(getActivity(), 0, options);
+        }
+
+        @Override
+        public boolean areAllItemsEnabled() {
+            return false;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return 0 != position;
         }
 
         @Override
@@ -102,7 +124,8 @@ public class QuestionFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Log.i(TAG, "position: " + position);
+        // Log.i(TAG, "position: " + position);
+        // if position == answer: 答对了
         if (mQuestionId + 1 == mQuestionListSize) {
             Toast.makeText(getActivity(), "测试结束", Toast.LENGTH_LONG).show();
         } else {
